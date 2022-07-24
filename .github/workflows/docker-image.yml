@@ -1,9 +1,9 @@
-name: Pipeline
-
 env:
   IMAGE_NAME: tpick-crawler
   IMAGE_TAGS: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
   IMAGE_FULL_TAGS: ${{ env.IMAGE_TAGS }}:latest
+  
+name: Pipeline
 
 on:
   push:
