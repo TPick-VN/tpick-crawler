@@ -1,7 +1,5 @@
 env:
-  IMAGE_NAME: tpick-crawler
-  IMAGE_TAGS: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
-  IMAGE_FULL_TAGS: ${{ env.IMAGE_TAGS }}:latest
+  IMAGE_TAGS: ${{ secrets.DOCKERHUB_USERNAME }}/tpick-crawler:latest
   
 name: Pipeline
 
@@ -33,6 +31,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ env.IMAGE_FULL_TAGS }}
-          cache-from: type=registry,ref=${{ env.IMAGE_FULL_TAGS }}
+          tags: ${{ env.IMAGE_TAGS }}
+          cache-from: type=registry,ref=${{ env.IMAGE_TAGS }}
           cache-to: type=inline
