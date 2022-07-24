@@ -25,4 +25,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_TOKEN }}/tpick-crawler:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tpick-crawler:latest
+          cache-from: type=registry,ref=user/app:buildcache
+          cache-to: type=registry,ref=user/app:buildcache,mode=max
