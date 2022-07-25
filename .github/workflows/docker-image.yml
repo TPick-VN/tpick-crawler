@@ -12,8 +12,8 @@ jobs:
     name: Build and Push to Docker Hub
     runs-on: ubuntu-latest
     steps:
-      - uses: TPick-VN/tpick-actions/docker@v1
+      - uses: tpick-actions/docker@v1
         with: 
           image-name: tpick-crawler
           dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
-          dockerhub-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
