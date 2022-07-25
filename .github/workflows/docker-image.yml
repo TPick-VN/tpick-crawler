@@ -15,5 +15,5 @@ jobs:
       - uses: TPick-VN/tpick-actions/docker@v1
         with: 
           image-name: tpick-crawler
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+          dockerhub-password: ${{ secrets.DOCKERHUB_TOKEN }}
