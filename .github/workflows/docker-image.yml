@@ -15,8 +15,7 @@ jobs:
     name: Build and Push to Docker Hub
     runs-on: ubuntu-latest
     steps:
-      - name: Test
-        uses: TPick-VN/tpick-actions/docker@v1
+      - uses: TPick-VN/tpick-actions/docker@v1
         with: 
           image-name: tpick-crawler
 
