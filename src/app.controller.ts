@@ -11,7 +11,7 @@ export class AppController {
       throw new BadRequestException('shopUrl is missed!');
     }
 
-    if (shopUrl.includes('shopeefood.vn')) {
+    if (shopUrl.includes('shopeefood.vn') || shopUrl.includes('food.grab')) {
       return this.appService.getShopeeFoodDetails(shopUrl);
     }
 

@@ -3,7 +3,7 @@ version: '3'
 services:
   tpick-crawler:
     build: .
-    image: tpick-crawler
+    image: hansatthan/tpick-crawler
     ports:
       - 3333:80
     environment:

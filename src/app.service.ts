@@ -21,11 +21,17 @@ export class AppService {
       width: 1024,
       height: 8000,
     });
+
     await page.goto(url, {
       waitUntil: 'networkidle0',
     });
+    let result;
 
-    const result = await this.get(page);
+    if (url.startsWith('https://shopeefood')) {
+      result = await this.get(page);
+    } else if (url.startsWith('https://food.grab')) {
+      result = await this.getGrab(page);
+    }
 
     await browser.close();
 
@@ -94,11 +100,73 @@ export class AppService {
     return shop;
   }
 
+  private async getGrab(page: puppeteer.Page): Promise<IShop> {
+    const shop: IShop = {
+      name: await this.tryOrDefault(
+        page.$eval('[class^="name___"]', (el) => el.textContent),
+      ),
+      imageUrl: await this.tryOrDefault(
+        page.$eval(
+          '.detail-restaurant-img > img',
+          (el) => (el as HTMLImageElement).src,
+        ),
+      ),
+      address: await this.tryOrDefault(
+        page.$eval('.address-restaurant', (el) => el.textContent),
+      ),
+      sections: [],
+    };
+    let currentSection: ISection;
+    let currentItem: IItem;
+
+    const elements = await page.$$("[class^='category___']");
+
+    for (const element of elements) {
+      // Section area
+      currentSection = {
+        name: await this.tryOrDefault(
+          element.$eval("[class^='categoryName___']", (el) => el.textContent),
+        ),
+        items: [],
+      };
+      shop.sections.push(currentSection);
+
+      const itemElements = await element.$$("[class*='menuItem___']");
+      for (const itemElement of itemElements) {
+        currentItem = {};
+        currentItem.name = await this.tryOrDefault(
+          itemElement.$eval("[class^='itemNameTitle___']", (el) => el.textContent),
+        );
+        currentItem.description = await this.tryOrDefault(
+          itemElement.$eval("[class^='itemDescription___']", (el) => el.textContent),
+        );
+        const priceRaw = await this.tryOrDefault(
+          itemElement.$eval("[class^='discountedPrice___']", (el) => el.textContent),
+        );
+        currentItem.price = +priceRaw.replace(/[^0-9]/g, '');
+
+        currentItem.imageUrl = await this.tryOrDefault(
+          itemElement.$eval(
+            "[class*='menuItemPhoto___'] img",
+            (el) => (el as HTMLImageElement).src,
+          ),
+        );
+        currentItem.isAvailable = !!(await this.tryOrDefault(
+          itemElement.$("[class*='quickAdder___']"),
+        ));
+
+        currentSection.items.push(currentItem);
+      }
+    }
+
+    return shop;
+  }
+
   private async tryOrDefault(func: Promise<any>) {
     try {
       return await func;
     } catch (e) {
-      return undefined;
+      return null;
     }
   }
 }
